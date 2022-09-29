@@ -43,7 +43,7 @@ bool Pathfinder::FindMazePath(int tempMaze[5][5][5],int x,int y,int z){
 	}
 }
 
-string Pathfinder::toString() {
+string Pathfinder::toString() const{
 	stringstream ss;
 	string contents;
 	for(int i = 0; i < 5; i++){
@@ -76,22 +76,26 @@ void Pathfinder::createRandomMaze() {
 bool Pathfinder::importMaze(string file_name) {
 	ifstream fin;
 	int tempMaze[5][5][5];
-
+	
 	fin.open(file_name);
 	if(!fin.is_open()){
 		return false;
 	}
+	cout << "Importing Maze from " << file_name << endl;
 	for(int i = 0; i < 5; i++){
 		for(int j = 0; j < 5; j++){
 			for(int k = 0; k < 5; k++){
+				cout << "("<<i<<","<<j<<","<<k<<") = ";	//DEBUG
 				fin >> tempMaze[i][j][k];
-				if(tempMaze[i][j][k] != 1 || tempMaze[i][j][k] != 0 || fin.eof()){
-					if(fin.eof()){
+				cout << tempMaze[i][j][k] << endl;			//DEBUG
+				if(tempMaze[i][j][k] != 1 && tempMaze[i][j][k] != 0 || fin.eof()){
+					if(fin.eof() && i < 4){
 						cout << "fewer than 125 blocks" << endl;
 					}
-					else{
+					else if(tempMaze[i][j][k] != 1 && tempMaze[i][j][k] != 0){
 						cout << "not a 1 or 0" << endl;
 					}
+					else{};
 					return false;
 				}
 			}
@@ -112,5 +116,3 @@ vector<string> Pathfinder::solveMaze(){
 	
 	return path;
 }
-
-
