@@ -76,7 +76,7 @@ void Pathfinder::createRandomMaze() {
 bool Pathfinder::importMaze(string file_name) {
 	ifstream fin;
 	int tempMaze[5][5][5];
-	
+		
 	fin.open(file_name);
 	if(!fin.is_open()){
 		return false;
@@ -85,18 +85,19 @@ bool Pathfinder::importMaze(string file_name) {
 	for(int i = 0; i < 5; i++){
 		for(int j = 0; j < 5; j++){
 			for(int k = 0; k < 5; k++){
-				cout << "("<<i<<","<<j<<","<<k<<") = ";	//DEBUG
+				//cout << "("<<i<<","<<j<<","<<k<<") = ";	//DEBUG
 				fin >> tempMaze[i][j][k];
-				cout << tempMaze[i][j][k] << endl;			//DEBUG
+				//cout << tempMaze[i][j][k] << endl;			//DEBUG
 				if(tempMaze[i][j][k] != 1 && tempMaze[i][j][k] != 0 || fin.eof()){
 					if(fin.eof() && i < 4){
 						cout << "fewer than 125 blocks" << endl;
+						return false;
 					}
 					else if(tempMaze[i][j][k] != 1 && tempMaze[i][j][k] != 0){
 						cout << "not a 1 or 0" << endl;
+						return false;
 					}
 					else{};
-					return false;
 				}
 			}
 		}
@@ -105,9 +106,11 @@ bool Pathfinder::importMaze(string file_name) {
 		for(int j = 0; j < 5; j++){
 			for(int k = 0; k < 5; k++){
 				currentMaze[i][j][k] = tempMaze[i][j][k];
+				//cout << currentMaze[i][j][k] << " ";		//DEBUG
 			}
 		}
 	}
+	//cout << endl;		//DEBUG
 	return true;
 }
 

@@ -16,7 +16,7 @@ int main(){
 	}
 	PF.importMaze(FILE_NAME);
 
-	
+	cout << PF.toString() << endl;
 	
 	return 0;
 }
