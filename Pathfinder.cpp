@@ -87,6 +87,7 @@ bool Pathfinder::importMaze(string file_name) {
 vector<string> solveMaze(){
 	vector<string> path;
 	
+	
 	/* 
 	*	start at (0,0,0), check each of the adjacent blocks to see if 
 	*	they contain a 1. If none of them do, change the number at that 
