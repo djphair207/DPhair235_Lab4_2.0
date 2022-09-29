@@ -1,6 +1,7 @@
 #include "Pathfinder.h"
 
 Pathfinder::Pathfinder(){
+	srand(time(NULL));
 	for(int i = 0; i < 5; i++){
 		for(int j = 0; j < 5; j++){
 			for(int k = 0; k < 5; k++){
@@ -10,13 +11,35 @@ Pathfinder::Pathfinder(){
 	}
 }
 
-bool Pathfinder::FindMazePath(int x,int y,int z){
-	//func for checking neighbors
-	if(currentMaze[x][y][z] == 1){
-		return true;
+Pathfinder::~Pathfinder(){}
+
+bool Pathfinder::FindMazePath(int tempMaze[5][5][5],int x,int y,int z){
+	if(x < 0 || y < 0 || z < 0 || x >= 5 || y >= 5 || z >= 5){
+		return false; //not in the maze
+	}
+	else if(tempMaze[x][y][z] != BACKGROUND){
+		return false; //a wall or a dead end
+	}
+	else if(x == 5 - 1 && y == 5 - 1 && z == 5 - 1){
+		tempMaze[x][y][z] = PATH;
+		path.push_back( "(" + to_string(x) + "," + to_string(y) + "," + to_string(z) + ")" );
+		return true;	//point is on path and is maze exit
 	}
 	else{
-		return false;
+		tempMaze[x][y][z] = PATH;
+		if(FindMazePath(tempMaze, x - 1, y, z) ||
+				FindMazePath(tempMaze, x + 1, y, z) ||
+				FindMazePath(tempMaze, x, y - 1, z) ||
+				FindMazePath(tempMaze, x, y + 1, z) ||
+				FindMazePath(tempMaze, x, y, z - 1) ||
+				FindMazePath(tempMaze, x, y, z + 1) )  {
+			path.push_back( "(" + to_string(x) + "," + to_string(y) + "," + to_string(z) + ")" );
+			return true;
+		}
+		else{
+			tempMaze[x][y][z] = TEMP;		//dead end
+			return false;
+		}
 	}
 }
 
@@ -84,16 +107,10 @@ bool Pathfinder::importMaze(string file_name) {
 	return true;
 }
 
-vector<string> solveMaze(){
-	vector<string> path;
+vector<string> Pathfinder::solveMaze(){
+	FindMazePath(currentMaze, 0, 0, 0);
 	
-	
-	/* 
-	*	start at (0,0,0), check each of the adjacent blocks to see if 
-	*	they contain a 1. If none of them do, change the number at that 
-	* spot to the "visited" number and return to the previous spot. Then 
-	*/
-	
+	return path;
 }
 
 
